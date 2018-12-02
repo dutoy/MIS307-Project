@@ -3,7 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mis307project;
+
+/**
+ *
+ * @author Isa Othman (update 12/02)
+ */
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 import java.io.File;
 import java.io.IOException;
@@ -15,16 +24,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-/**
- *
- * @author Isa Othman
- */
-public class MIS307project {
+public class Customer {
 
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws Exception {
+
         //Use database.properties
         if (args.length == 0) {
-            System.out.println("Usage: java MIS307project propertiesFile");
+            System.out.println("Usage: java Customer propertiesFile");
             System.exit(0);
         }
 
@@ -34,28 +40,46 @@ public class MIS307project {
                 stat.execute("DROP TABLE Customer");
             } catch (SQLException e) {
                 // get exception if table doesn't exist yet
-                System.out.println("Database error");
-                e.printStackTrace();
+            }
+
+            // CREATE TABLE for Customer
+            stat.execute("CREATE TABLE Customer (CustomerID VARCHAR(10), "
+                    + "CName VARCHAR (20), "
+                    + "CPhone VARCHAR(20), "
+                    + "CEmail VARCHAR(20), "
+                    + "CPoint VARCHAR(10))");
+
+            // Read txt file, insert into table Customer
+            String inputFileName = "customer.txt";
+            File inputFile = new File(inputFileName);
+            Scanner in = new Scanner(inputFile);
+
+            while (in.hasNextLine()) {
+                String line = in.nextLine();
+                Scanner lineScanner = new Scanner(line);
+
+                String CustomerID = "'" + lineScanner.next() + "'";
+                String CName = "'" + lineScanner.next() + "'";
+                String CPhone = "'" + lineScanner.next() + "'";
+                String CEmail = "'" + lineScanner.next() + "'";
+                String CPoint = "'" + lineScanner.next() + "'";
+                String query = "INSERT INTO Customer VALUES (" + CustomerID + "," + CName + ","
+                        + CPhone + "," + CEmail + "," + CPoint + ")";
+                stat.execute(query);
+                lineScanner.close();
             }
 
             /*
-             *CREATE TABLE FOR CUSTOMER
-             */
-            stat.execute("CREATE TABLE Customer"
-                    + "(CustomerID NUMBER,"
-                    + "CName VARCHAR(20), "
-                    + "CPhone CHAR(10), "
-                    + "CEmail VARCHAR(20)) "
-                    + "CPoint NUMBER");
-
-            /*
-             *CREATE TABLE FOR CUSTOMER
-             */
+            
+             CREATE TABLE FOR EMPLOYEE
+             
             stat.execute("CREATE TABLE Employee"
                     + "(EmployeeID NUMBER,"
                     + "EName VARCHAR)"
                     + "EPhone NUMBER");
+             */
 
+ /*
             String inputFileName = "customer.txt";
             File inputFile = new File(inputFileName);
             Scanner in = new Scanner(inputFile);
@@ -64,79 +88,20 @@ public class MIS307project {
             while (in.hasNextLine()) {
                 stat.execute("INSERT INTO Customer (CustomerID, CName, CPhone, CEmail, CPoint)");
             }
-
-            // Main loop of the program. Complete this while loop.
-            Scanner in2 = new Scanner(System.in);
-            boolean continueProgram = true;
-            while (continueProgram) {
-                System.out.println("Select from the following options");
-                System.out.println("(Q) Quit");
-                System.out.println("(A) Add a car");
-                System.out.println("(C) Calculate average");
-                System.out.println("(W) Write the entire table to a text file");
-                System.out.println("(P) Print the entire table");
-                System.out.println("(M) Print a subset of the cars based on MPG");
-                String select = in2.next();
-
-                // Data to Modify CPoint
-                // customer bought coffee
-                if (select.equals("b")) {
-                    
+             */
+ 
+            // Testing: Data is in the Database
+            try (ResultSet result = stat.executeQuery("SELECT * FROM Customer")) {
+                System.out.printf("%-15s%-15s%-15s%-15s%6s\n", "CustomerID", "CName", "CPhone",
+                        "CEmail", "CPoint");
+                while (result.next()) {
+                    System.out.printf("%-15s", result.getString("CustomerID"));
+                    System.out.printf("%-15s", result.getString("CName"));
+                    System.out.printf("%-15s", result.getString("CPhone"));
+                    System.out.printf("%-15s", result.getString("CEmail"));
+                    System.out.printf("%6s\n", result.getString("CPoint"));
                 }
-                        
-
-                // Add user to the database
-                if (select.equals("A")) {
-                    // Prompt user to input Name, Phone, email
-                    String newName = in2.next();
-                    double newPhone = in2.nextDouble();
-                    String newEmail = in2.next();
-
-                    // Execute Stat to add value into the Customer table
-                    addCar(conn, newName, newPhone, newEmail);
-                }
-
-                // If its done for the day
-                if (select.equals("W")) { // If user select W
-                    // Prompt user to input Output file name
-                    System.out.print("Output file name: ");
-                    String output = in2.next();
-                    File file = new File(inputFileName); // Old name
-                    File file2 = new File(output); // New name
-                    boolean success = file.renameTo(file2); // Rename file 
-                }
-
-                if (select.equals("P")) { // If user select P
-                    // Print all products in Car table
-                    printTable(conn);
-                }
-
             }
         }
     }
-
-    // If user input "A", add car
-    public static void addCar(Connection conn, String newName, double newPhone, String newEmail) throws SQLException {
-        try (PreparedStatement stat = conn.prepareStatement("INSERT INTO Customer VALUES(?,?,?,?,?)")) {
-            stat.setString(2, newName);
-            stat.setString(3, newPhone);
-            stat.setString(4, newEmail);
-        }
-        System.out.println();
-    }
-
-    // If user input "P", print the entire table
-    public static void printTable(Connection conn) throws SQLException {
-        try (Statement stat = conn.createStatement()) {
-            ResultSet result = stat.executeQuery("SELECT * FROM Car");
-            while (result.next()) {
-                for (int i = 1; i <= 4; i++) {
-                    System.out.print(result.getString(i) + "\t");
-                }
-                System.out.println();
-            }
-            result.close();
-        }
-    }
-
 }
