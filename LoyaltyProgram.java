@@ -10,4 +10,22 @@
  */
 public class LoyaltyProgram {
     
+    Customer customer = new Customer();
+    
+    /**
+     *
+     * @param points
+     */
+    public static void view(int points){
+        if(points >= 100){
+            System.out.println("You are eligible for a free coffee! You have "+points+" points.");
+        }
+        else{
+            System.out.println("You have "+points+" points.");
+        }
+    }
+    public static void update(String name, String phone, String email){
+        
+    }
+    
 }
