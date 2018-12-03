@@ -56,6 +56,18 @@ public class TransactionInfo {
                     String name = in.next();
                     try (ResultSet result = stat.executeQuery("SELECT * FROM Customer WHERE CName "
                             + "LIKE '" + name + "'")) {
+                        if(result.equals(name)){
+                            //points for the loyalty program
+                            int point = Integer.parseInt(name);
+                            if(point>=100){
+                                System.out.println("You are eligible for a free coffee! You have "+point+" points.");
+                                System.out.println("Hello");
+                            }
+                            else{
+                                System.out.println("You have "+point+" points.");
+                                System.out.println("Hello");
+                            }
+                        }
                         System.out.println("Hello");
                         CName = name;
                         verify = true;
