@@ -10,17 +10,19 @@
  */
 public class RewardAmount {
     
+    
+    
     Customer customer = new Customer();
     
-    public static void add(___) {
+    public static void add(String name, String phone, String email) {
         
     }
     
-    public static void remove(___) {
+    public static void remove(String name, String phone, String email) {
         
     }
     
-    public static void update(__) {
+    public static void update(int point) {
         
     }
     

@@ -47,7 +47,10 @@ public class DailyReport {
                     + "Total VARCHAR(20))");
 
             stat.execute("INSERT INTO DailyReport VALUES('1','1','1','1','1')");
+            stat.execute("INSERT INTO DailyReport VALUES('1','1','1','1','1')");
+            stat.execute("INSERT INTO DailyReport VALUES('1','1','1','1','1')");
 
+            // TEST: Print value
             try (ResultSet result = stat.executeQuery("SELECT * FROM DailyReport")) {
                 while (result.next()) {
                     for (int i = 1; i <= 5; i++) {
@@ -56,8 +59,8 @@ public class DailyReport {
                     System.out.println();
                 }
             }
-            // TEST Saving File
-            
+           
+            // TEST: Save file to txt
             Scanner in2 = new Scanner(System.in);
             
             try (ResultSet result = stat.executeQuery("SELECT * FROM DailyReport")) {
@@ -65,15 +68,19 @@ public class DailyReport {
                 String outputFileName = in2.next();
                 PrintWriter out = new PrintWriter(outputFileName);
                 
-                System.out.printf("%-15s%-15s%-15s%-15s%-15s\n",
+                out.printf("%-15s%-15s%-15s%-15s%-15s",
                         "OrderID", "ItemName", "ItemPrice", "Quantity", "Total");
+                out.println();
                 while (result.next()) {
                     out.printf("%-15s", result.getString("OrderID"));
                     out.printf("%-15s", result.getString("ItemName"));
                     out.printf("%-15s", result.getString("ItemPrice"));
                     out.printf("%-15s", result.getString("Quantity"));
-                    out.printf("%-15s\n", result.getString("Total"));
+                    out.printf("%-15s", result.getString("Total"));
+                    out.println();
                 }
+                result.close();
+                out.close();
             }
         }
     }
