@@ -37,7 +37,7 @@ public class Item {
             }
 
             // CREATE TABLE for Item
-            stat.execute("CREATE TABLE Items (ItemID CHAR(2), Item CHAR(25), Description VARCHAR(100))");
+            stat.execute("CREATE TABLE Items (ItemID CHAR(2), Item CHAR(30), Description VARCHAR(100))");
 
             // INSERT value
             stat.execute("INSERT INTO Items VALUES('01', 'Iced Coffee', 'A chilled coffee')");
